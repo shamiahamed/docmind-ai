@@ -1,0 +1,24 @@
+[project]
+name = "docmind-backend"
+version = "0.1.0"
+description = "FastAPI backend for DocMind Multi-Agent RAG"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi",
+    "uvicorn[standard]",
+    "python-multipart",
+    "pydantic-settings",
+    "python-jose[cryptography]",
+    "langchain",
+    "langchain-openai",
+    "langgraph",
+    "chromadb",
+    "pypdf",
+    "docx2txt",
+    "openai",
+    "httpx",
+]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
