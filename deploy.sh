@@ -1,15 +1,19 @@
 #!/bin/bash
 
-echo "Starting deployment..."
+set -e
 
 cd /home/ubuntu/docmind-ai
 
 git pull origin main
 
-echo "Restarting frontend..."
+cd docmind-ai
+
+export NODE_OPTIONS="--max-old-space-size=3072"
+
+npm install
+
+npm run build
+
 pm2 restart docmind-ai
 
-echo "Restarting backend..."
 sudo systemctl restart docmind.service
-
-echo "Deployment completed successfully"
