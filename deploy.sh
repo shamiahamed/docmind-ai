@@ -6,13 +6,12 @@ cd /home/ubuntu/docmind-ai
 
 git pull origin main
 
-cd docmind-ai
-
-export NODE_OPTIONS="--max-old-space-size=3072"
-
-npm install
+cd /home/ubuntu/docmind-ai/docmind-ai
 
 npm run build
+
+cd dist/server
+ln -sf index.js server.js
 
 pm2 restart docmind-ai
 
