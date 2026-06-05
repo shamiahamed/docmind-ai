@@ -64,10 +64,7 @@ function LoginPage() {
         console.log("[Auth] Attempting sign-in for:", email);
         const { data, error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
-
-        console.log("[Auth] Sign-in success", data.user?.id);
-        success("Signed in successfully! Welcome back.");
-        router.navigate({ to: "/chat" });
+        router.navigate({ to: "/chat" });          
       }
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : "Something went wrong";
