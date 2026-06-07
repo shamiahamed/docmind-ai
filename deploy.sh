@@ -1,17 +1,22 @@
 #!/bin/bash
 set -e
 
-# Go to server build folder
-cd /home/ubuntu/docmind-ai/docmind-ai/dist/server
+cd /home/ubuntu/docmind-ai
 
-# Ensure server.js points to latest build
+git pull origin main
+
+cd /home/ubuntu/docmind-ai/docmind-ai
+
+export NODE_OPTIONS="--max-old-space-size=4096"
+
+npm run build
+
+cd dist/server
 ln -sf index.js server.js
 
-# Restart PM2 process
 cd /home/ubuntu/docmind-ai/docmind-ai
-pm2 restart docmind-ai
 
-# Restart systemd service 
+pm2 restart ecosystem.config.cjs --env production --update-env
+
 cd /home/ubuntu/docmind-ai/docmind-ai-backend
 sudo systemctl restart docmind.service
-
