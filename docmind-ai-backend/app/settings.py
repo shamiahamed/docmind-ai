@@ -3,7 +3,7 @@ from typing import List, Optional
 
 class Settings(BaseSettings):
     PROJECT_NAME: str = "DocMind Backend"
-    ALLOWED_ORIGINS: List[str] = ["http://localhost:8080", "https://*.lovable.app", "https://docmind.app"]
+    ALLOWED_ORIGINS: List[str] = ["http://localhost:8080", "https://*.lovable.app", "https://docmind.app","http://13.222.21.162:3000"]
     
     # Supabase
     SUPABASE_URL: str
