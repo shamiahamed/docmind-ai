@@ -6,12 +6,10 @@ cd /home/ubuntu/docmind-ai
 
 git pull origin main
 
-cd /home/ubuntu/docmind-ai/docmind-ai
-
-npm run build
-
-cd dist/server
+cd /home/ubuntu/docmind-ai/docmind-ai/dist/server
 ln -sf index.js server.js
+
+cd /home/ubuntu/docmind-ai/docmind-ai
 
 pm2 restart docmind-ai
 
