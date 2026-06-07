@@ -21,3 +21,11 @@ async def add_documents_to_store(user_id: str, chunks: list):
     vector_store = get_vector_store(user_id)
     await vector_store.aadd_documents(chunks)
     logger.info(f"[EMBEDDER] Done | {len(chunks)} chunks stored in ChromaDB")
+
+def delete_document_from_store(user_id: str, doc_id: str):
+    collection_name = f"user_{user_id.replace('-', '_')}"
+    logger.info(f"[EMBEDDER] Deleting chunks for doc={doc_id} in collection={collection_name}")
+    client = chromadb.PersistentClient(path=settings.CHROMA_PERSIST_DIRECTORY)
+    collection = client.get_or_create_collection(collection_name)
+    collection.delete(where={"doc_id": doc_id})
+    logger.info(f"[EMBEDDER] Deleted chunks for doc={doc_id} from user={user_id}")

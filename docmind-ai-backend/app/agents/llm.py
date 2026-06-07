@@ -22,8 +22,10 @@ def get_llm(model: str = "openrouter/auto", streaming: bool = False):
             }
         )
     
+    openai_model = "gpt-4o-mini" if model == "openrouter/auto" else model.split("/")[-1]
+    logger.info(f"[LLM] Fallback to OpenAI model selection: {openai_model}")
     return ChatOpenAI(
-        model=model.split("/")[-1],
+        model=openai_model,
         openai_api_key=settings.OPENAI_API_KEY,
         streaming=streaming
     )

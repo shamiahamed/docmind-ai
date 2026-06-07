@@ -7,13 +7,9 @@ from app.agents.synthesizer import synthesizer_node
 from app.agents.critic import critic_node
 
 def router(state: AgentState):
-    # If critic failed and we have iterations left, go back to supervisor
-    if state.get("critique", {}).get("verdict") == "fail" and state.get("iterations", 0) < 2:
-        return "supervisor"
-    
-    # If we have a plan, execute the next agent in the plan that hasn't been called
-    # Or just follow a fixed order for simplicity in the first multi-agent version
-    if not state.get("retrieved"):
+    # Check if retriever has run by examining the scratchpad
+    has_retrieved = any(s.get("agent") == "retriever" for s in state.get("scratchpad", []))
+    if not has_retrieved:
         return "retriever"
     
     intent = state.get("intent", "qa")

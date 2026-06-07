@@ -3,7 +3,7 @@ from typing import List
 from app.models import DocumentRow
 from app.deps import get_current_user
 from app.ingest.parser import parse_and_chunk
-from app.ingest.embedder import add_documents_to_store
+from app.ingest.embedder import add_documents_to_store, delete_document_from_store
 from app.lib.supabase import get_supabase
 from app.logger import get_logger
 import uuid
@@ -106,14 +106,21 @@ async def upload_document(
 @router.delete("/{doc_id}")
 async def delete_document(doc_id: str, user: dict = Depends(get_current_user)):
     supabase = get_supabase()
+    user_id = user["user_id"]
+    
     # Check ownership
     doc = supabase.table("documents").select("user_id").eq("id", doc_id).single().execute()
-    if not doc.data or doc.data["user_id"] != user["user_id"]:
+    if not doc.data or doc.data["user_id"] != user_id:
         raise HTTPException(status_code=403, detail="Not authorized")
     
-    # Delete from DB
+    # Delete chunks from ChromaDB (best-effort)
+    try:
+        delete_document_from_store(user_id, doc_id)
+    except Exception as e:
+        logger.warning(f"[DELETE] ChromaDB cleanup failed for {doc_id}: {e}")
+    
+    # Delete from Supabase
     supabase.table("documents").delete().eq("id", doc_id).execute()
     
-    # Note: In a full implementation, we should also delete chunks from ChromaDB
     logger.info(f"[DELETE] Document {doc_id} removed")
     return {"status": "deleted"}

@@ -15,4 +15,5 @@ ln -sf index.js server.js
 
 pm2 restart docmind-ai
 
+cd /home/ubuntu/docmind-ai/docmind-ai-backend
 sudo systemctl restart docmind.service
